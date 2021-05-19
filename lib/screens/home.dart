@@ -57,7 +57,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(notes[index]["id"].toString() +
                               ' ' +
                               notes[index]["title"].toString()),
-                          Text(notes[index]["content"].toString())
+                          Text(notes[index]["content"].toString()),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () async {
+                              DatabaseHelper db = DatabaseHelper();
+                              await db.delete(notes[index]["id"]);
+                              refreshList();
+                              setState(() {});
+                            },
+                          ),
                         ],
                       ),
                     );

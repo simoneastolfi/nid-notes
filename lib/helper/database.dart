@@ -46,10 +46,9 @@ class DatabaseHelper {
     return (await database)!.query('notes');
   }
 
-  //cancellazione, aggiungendo sulla card una x o qualcosa per cancellare.
-  Future<int> delete(Note note) async {
-    //metodo toMap, trasforma un qualsiasi oggetto in una mappa chiave-valore, string dynamic. E' come un jSON
-    return (await database)!.rawDelete('notes');
+
+  Future<int> delete(int id) async {
+    return (await database)!.rawDelete('DELETE FROM notes WHERE id = ' + id.toString());
   }
 
 
