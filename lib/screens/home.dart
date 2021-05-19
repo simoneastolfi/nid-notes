@@ -10,9 +10,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  //Lista di oggetti mappa stringa per il primo valore e dynamic per il secondo.
   List<Map<String, dynamic>> notes = [];
 
   @override
+
   void initState() {
     super.initState();
     refreshList();
@@ -77,9 +79,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  //Metodo che istanzia il dbhelper(della cartella helper)
+  //interroga il dp ed estrae tutti gli oggetti che ci sono, tutte mappe chiave-valore
   refreshList() async {
     DatabaseHelper db = DatabaseHelper();
     notes = await db.queryAllRows();
-    setState(() {});
+    setState(() {});//set state solo per refresh della schermata
   }
 }
