@@ -26,11 +26,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () async {
-          Note note = Note("Nota di prova", "Contenuto di prova");
-          DatabaseHelper db = DatabaseHelper();
-          await db.insert(note);
-          refreshList();
+        onPressed: () {
+          Navigator.of(context).pushNamed('/edit');
+          // Note note = Note("Nota di prova", "Contenuto di prova");
+          // DatabaseHelper db = DatabaseHelper();
+          // await db.insert(note);
+          // refreshList();
         },
       ),
       body: Column(

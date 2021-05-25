@@ -1,7 +1,7 @@
 class Note {
   final int? id;
   final String title;
-  final String content;
+  final String? content;
 
   Note(this.title, this.content, {this.id});
 
