@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).pushNamed('/edit');
+          Navigator.of(context).pushNamed('/insert');
           // Note note = Note("Nota di prova", "Contenuto di prova");
           // DatabaseHelper db = DatabaseHelper();
           // await db.insert(note);

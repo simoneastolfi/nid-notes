@@ -67,7 +67,7 @@ class _InsertScreenState extends State<InsertScreen> {
                         // });
                       }
                     },
-                    child: Text('Accedi'),
+                    child: Text('Salva'),
                   ),
                 ],
               ),
