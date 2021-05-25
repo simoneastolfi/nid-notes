@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:nid_notes/helper/database.dart';
 import 'package:nid_notes/models/note.dart';
@@ -51,12 +53,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: notes.length,
                   itemBuilder: (BuildContext ctx, index) {
                     return Card(
-                      child: Column(
+                      child: Row(
                         children: [
-                          Text(notes[index]["id"].toString() +
-                              ' ' +
-                              notes[index]["title"].toString()),
-                          Text(notes[index]["content"].toString())
+                          Flexible(
+                            flex: 4,
+                            child: _imageContainer(notes[index]["image"]),
+                          ),
+                          Flexible(
+                              flex: 8,
+                              child: Column(
+                                children: [
+                                  Text(notes[index]["id"].toString() +
+                                      ' ' +
+                                      notes[index]["title"].toString()),
+                                  Text(notes[index]["content"].toString())
+                                ],
+                              ))
                         ],
                       ),
                     );
@@ -82,5 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
     DatabaseHelper db = DatabaseHelper();
     notes = await db.queryAllRows();
     setState(() {});
+  }
+
+  Widget _imageContainer(String? image) {
+    if (image != null) {
+      return Image.memory(base64.decode(image));
+    }
+    return SizedBox.shrink();
   }
 }

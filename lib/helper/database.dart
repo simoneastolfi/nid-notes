@@ -14,8 +14,10 @@ class DatabaseHelper {
   _initDatabase() async {
     String path = join(await getDatabasesPath(), 'nid_notes.db');
     return await openDatabase(path,
-        version: 2,
-        onCreate: _onCreate);
+        version: 6,
+        onCreate: _onCreate,
+        onUpgrade: _onUpgrade
+    );
   }
 
   Future _onCreate(Database db, int version) async {
@@ -23,9 +25,16 @@ class DatabaseHelper {
           CREATE TABLE notes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
-            content TEXT NULL
+            content TEXT NULL,
+            image TEXT NULL,
           )
           ''');
+  }
+
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < newVersion) {
+      await db.execute("ALTER TABLE notes ADD COLUMN image TEXT;");
+    }
   }
 
   Future<int> insert(Note note) async {
