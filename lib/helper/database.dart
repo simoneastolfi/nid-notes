@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static Database? _database;
+  //singleton per controllare se la connessione esiste già, perchè creare piu connessioni occupa memoria
   Future<Database?> get database async {
     if (_database != null) return _database;
     // lazily instantiate the db the first time it is accessed
@@ -13,6 +14,7 @@ class DatabaseHelper {
 
   _initDatabase() async {
     String path = join(await getDatabasesPath(), 'nid_notes.db');
+    //creazione db viene creato una volta sola
     return await openDatabase(path,
         version: 6,
         onCreate: _onCreate,
@@ -20,6 +22,8 @@ class DatabaseHelper {
     );
   }
 
+
+  //la creazione della tabella viene fatta una sola volta per versione
   Future _onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE notes (
@@ -38,10 +42,18 @@ class DatabaseHelper {
   }
 
   Future<int> insert(Note note) async {
+    //metodo toMap, trasforma un qualsiasi oggetto in una mappa chiave-valore, string dynamic. E' come un jSON
     return (await database)!.insert('notes', note.toMap());
   }
 
   Future<List<Map<String, dynamic>>> queryAllRows() async {
+    //queryAllRows, restituiscie anche questo una mappa chiave valore
     return (await database)!.query('notes');
   }
+
+  Future<int> delete(int id) async {
+    return (await database)!.rawDelete('DELETE FROM notes WHERE id = ' + id.toString());
+  }
+
+
 }
