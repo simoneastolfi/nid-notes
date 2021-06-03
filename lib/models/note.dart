@@ -1,9 +1,18 @@
-class Note{
-  final int id;
-  final String title;
-  final String content;
+class Note {
+  int? id;
+  String title;
+  String? content;
+  String? image;
 
-  Note(this.id, this.title, this.content);
+  Note(this.title, this.content, {this.id, this.image});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'content': content,
+      'image': image,
+    };
+  }
+
 }
-
-
