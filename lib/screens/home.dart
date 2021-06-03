@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: notes.length,
       itemBuilder: (BuildContext context, int index) => _cardNote(index),
       staggeredTileBuilder: (int index) =>
-      new StaggeredTile.count(2, index.isEven ? 2 : 1),
+      new StaggeredTile.fit(2),
       mainAxisSpacing: 4.0,
       crossAxisSpacing: 4.0,
     );
@@ -85,31 +85,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _cardNote(int index){
     return Card(
-      child: Row(
+      child: Column(
         children: [
-          Flexible(
-            flex: 4,
-            child: _imageContainer(notes[index]["image"]),
-          ),
-          Flexible(
-              flex: 8,
-              child: Column(
-                children: [
-                  Text(notes[index]["id"].toString() +
-                      ' ' +
-                      notes[index]["title"].toString()),
-                  Text(notes[index]["content"].toString()),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () async {
-                      DatabaseHelper db = DatabaseHelper();
-                      await db.delete(notes[index]["id"]);
-                      refreshList();
-                      setState(() {});
-                    },
-                  ),
-                ],
-              ))
+          _imageContainer(notes[index]["image"]),
+          Text(notes[index]["id"].toString() +
+              ' ' +
+              notes[index]["title"].toString()),
+          Text(notes[index]["content"].toString()),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () async {
+              DatabaseHelper db = DatabaseHelper();
+              await db.delete(notes[index]["id"]);
+              refreshList();
+              setState(() {});
+            },
+          )
         ],
       ),
     );
