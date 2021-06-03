@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:nid_notes/arguments/editnote.dart';
 import 'package:nid_notes/helper/database.dart';
 import 'package:nid_notes/blocs/user_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:nid_notes/models/note.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -37,46 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
             flex: 10,
             child: Padding(
               padding: EdgeInsets.all(10),
-              child: GridView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
-                      childAspectRatio: 3 / 2,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20),
-                  itemCount: notes.length,
-                  itemBuilder: (BuildContext ctx, index) {
-                    return Card(
-                      child: Row(
-                        children: [
-                          Flexible(
-                            flex: 4,
-                            child: _imageContainer(notes[index]["image"]),
-                          ),
-                          Flexible(
-                              flex: 8,
-                              child: Column(
-                                children: [
-                                  Text(notes[index]["id"].toString() +
-                                      ' ' +
-                                      notes[index]["title"].toString()),
-                                  Text(notes[index]["content"].toString()),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete),
-                                    onPressed: () async {
-                                      DatabaseHelper db = DatabaseHelper();
-                                      await db.delete(notes[index]["id"]);
-                                      refreshList();
-                                      setState(() {});
-                                    },
-                                  ),
-                                ],
-                              ))
-                        ],
-                      ),
-                    );
-                  }),
+              child: _gridView(),
             ),
           ),
           Flexible(
@@ -108,4 +72,60 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return SizedBox.shrink();
   }
+
+  Widget _gridView() {
+    return new StaggeredGridView.countBuilder(
+      crossAxisCount: 4,
+      itemCount: notes.length,
+      itemBuilder: (BuildContext context, int index) => _cardNote(index),
+      staggeredTileBuilder: (int index) =>
+      new StaggeredTile.fit(2),
+      mainAxisSpacing: 4.0,
+      crossAxisSpacing: 4.0,
+    );
+  }
+
+  Widget _cardNote(int index){
+    return Card(
+      child: Column(
+        children: [
+          _imageContainer(notes[index]["image"]),
+          Text(notes[index]["id"].toString() +
+              ' ' +
+              notes[index]["title"].toString()),
+          Text(notes[index]["content"].toString()),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () async {
+              DatabaseHelper db = DatabaseHelper();
+              await db.delete(notes[index]["id"]);
+              refreshList();
+              setState(() {});
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () async {
+              Navigator.of(context).pushNamed('/insert',
+                  arguments: EditNoteArguments(
+                      Note(
+                        notes[index]['title'].toString(),
+                        notes[index]['content'].toString(),
+                        id: notes[index]['id'],
+                        image: notes[index]['image']
+                      )
+                  )
+
+              );
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+
 }
+
+
+
