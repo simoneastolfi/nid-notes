@@ -102,9 +102,9 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});//set state solo per refresh della schermata
   }
 
-  Widget _imageContainer(String? image) {
-    if (image != null) {
-      return Image.memory(base64.decode(image));
+  Widget _imageContainer(String? _imagePath) {
+    if (_imagePath != null) {
+      return Image.memory(base64.decode(_imagePath));
     }
     return SizedBox.shrink();
   }
